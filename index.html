@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="HOMEREM">
+<meta name="theme-color" content="#f8f7f3">
+<title>HOMEREM</title>
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f8f7f3;--bg2:#ffffff;--bg3:#efede8;--bg4:#e4e1da;
+  --text:#1a1a1a;--text2:#6b6868;--text3:#b3b0a8;
+  --border:rgba(0,0,0,0.07);--border2:rgba(0,0,0,0.13);
+  --green:#2dbe6c;--yellow:#e8b800;--orange:#f07d32;--red:#e83838;
+  --safe-top:env(safe-area-inset-top,44px);--safe-bot:env(safe-area-inset-bottom,20px);
+}
+@media(prefers-color-scheme:dark){:root{
+  --bg:#131312;--bg2:#1d1d1b;--bg3:#262623;--bg4:#303030;
+  --text:#f2f0eb;--text2:#908d85;--text3:#4d4b47;
+  --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.14);
+}}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;font-family:'Nunito',sans-serif}
+body{background:var(--bg);color:var(--text);min-height:100dvh;max-width:430px;margin:0 auto;overflow-x:hidden;padding-bottom:calc(72px + var(--safe-bot))}
+
+/* HEADER */
+.hdr{padding:calc(var(--safe-top) + 6px) 18px 10px;display:flex;align-items:center;justify-content:space-between;background:var(--bg);position:sticky;top:0;z-index:60;border-bottom:1px solid var(--border)}
+.logo{font-size:21px;font-weight:900;letter-spacing:-1px;color:var(--text)}
+.logo em{font-style:normal;color:var(--green)}
+.hbtn{width:36px;height:36px;border-radius:11px;background:var(--bg2);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;transition:.14s}
+.hbtn:active{transform:scale(.91)}
+
+/* TABS */
+.tabs{display:flex;gap:4px;padding:12px 16px 6px}
+.tab{padding:7px 15px;border-radius:11px;font-size:13px;font-weight:800;color:var(--text3);cursor:pointer;transition:.14s;letter-spacing:-.2px}
+.tab.on{background:var(--text);color:var(--bg)}
+
+/* RING GRID */
+.rgrid{display:grid;grid-template-columns:1fr 1fr;gap:11px;padding:6px 16px 0}
+
+/* RING CARD */
+.rc{background:var(--bg2);border-radius:22px;border:1px solid var(--border);padding:14px 13px 12px;cursor:pointer;transition:transform .14s;position:relative;overflow:hidden;user-select:none}
+.rc:active{transform:scale(.95)}
+.rc-bar{position:absolute;top:0;left:0;right:0;height:3px;border-radius:22px 22px 0 0}
+.rc-emoji{font-size:28px;line-height:1;margin-bottom:8px;display:block;text-align:center}
+.rc-ring{position:relative;width:76px;height:76px;margin:0 auto 9px}
+.rc-ring svg{position:absolute;inset:0}
+.rc-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;line-height:1.1}
+.rc-num{font-size:18px;font-weight:900}
+.rc-unit{font-size:9px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.3px}
+.rc-name{font-size:12px;font-weight:800;text-align:center;line-height:1.3;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rc-sched{font-size:10px;color:var(--text3);text-align:center;font-weight:700}
+.rc-btns{display:flex;gap:6px;margin-top:9px}
+.rcbtn{flex:1;padding:7px 0;border-radius:10px;border:none;font-size:11px;font-weight:800;cursor:pointer;transition:.12s;letter-spacing:-.1px}
+.rcbtn:active{transform:scale(.94)}
+.rcbtn.edit{background:var(--bg3);color:var(--text2)}
+.rcbtn.done{background:var(--text);color:var(--bg)}
+
+/* LIST CARD */
+.lc{background:var(--bg2);border-radius:15px;border:1px solid var(--border);padding:13px 15px;display:flex;align-items:center;gap:13px;cursor:pointer;transition:.13s;margin-bottom:9px}
+.lc:active{background:var(--bg3)}
+.lc-ring{flex-shrink:0;width:52px;height:52px;position:relative}
+.lc-ring svg{position:absolute;inset:0}
+.lc-rc{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;line-height:1}
+.lc-num{font-size:13px;font-weight:900}
+.lc-u{font-size:8px;font-weight:800;color:var(--text2);text-transform:uppercase}
+.lc-body{flex:1;min-width:0}
+.lc-name{font-size:14px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lc-meta{font-size:11px;color:var(--text2);margin-top:3px;font-weight:600}
+.lc-em{font-size:26px;flex-shrink:0}
+
+/* BADGE */
+.badge{display:inline-block;padding:3px 9px;border-radius:20px;font-size:10px;font-weight:800}
+.bg{background:rgba(45,190,108,.14);color:var(--green)}
+.by{background:rgba(232,184,0,.14);color:var(--yellow)}
+.bo{background:rgba(240,125,50,.14);color:var(--orange)}
+.br{background:rgba(232,56,56,.14);color:var(--red)}
+
+/* EMPTY */
+.empty{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:56px 24px;gap:10px;text-align:center}
+.empty-ico{width:74px;height:74px;border-radius:50%;border:3px dashed var(--bg4);display:flex;align-items:center;justify-content:center;font-size:30px}
+
+/* FAB */
+.fab{position:fixed;bottom:calc(72px + var(--safe-bot) + 10px);right:18px;width:52px;height:52px;border-radius:15px;background:var(--text);border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:40;box-shadow:0 4px 18px rgba(0,0,0,.18);transition:.14s}
+.fab:active{transform:scale(.91)}
+.fab svg{color:var(--bg)}
+
+/* NAV */
+.nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:var(--bg);border-top:1px solid var(--border);display:flex;justify-content:space-around;padding:10px 0 calc(10px + var(--safe-bot));z-index:60}
+.ni{display:flex;flex-direction:column;align-items:center;gap:3px;padding:4px 18px;border-radius:11px;cursor:pointer;color:var(--text3);font-size:10px;font-weight:800;transition:.13s;letter-spacing:-.1px}
+.ni svg{width:22px;height:22px}
+.ni.on{color:var(--text)}
+.ni:active{background:var(--bg3)}
+
+/* ── MODAL / SHEET ── */
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.48);z-index:200;align-items:flex-end}
+.overlay.open{display:flex;animation:fo .18s ease}
+@keyframes fo{from{opacity:0}to{opacity:1}}
+.sheet{background:var(--bg2);border-radius:26px 26px 0 0;border:1px solid var(--border);border-bottom:none;padding:18px 18px calc(22px + var(--safe-bot));width:100%;max-height:93dvh;overflow-y:auto;animation:su .3s cubic-bezier(.34,1.4,.64,1)}
+@keyframes su{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.handle{width:34px;height:4px;border-radius:2px;background:var(--bg4);margin:0 auto 16px}
+.sheet-title{font-size:20px;font-weight:900;margin-bottom:16px;letter-spacing:-.5px}
+
+/* FORM */
+.flabel{font-size:11px;font-weight:800;color:var(--text3);text-transform:uppercase;letter-spacing:.6px;margin-bottom:7px;display:block}
+.fi{width:100%;background:var(--bg3);border:1.5px solid transparent;border-radius:12px;padding:12px 14px;font-size:15px;font-weight:700;color:var(--text);outline:none;transition:.14s;margin-bottom:13px}
+.fi:focus{border-color:var(--text);background:var(--bg2)}
+.fi::placeholder{color:var(--text3);font-weight:500}
+
+/* EMOJI GRID */
+.egrid{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin-bottom:13px}
+.ep{width:38px;height:38px;border-radius:10px;background:var(--bg3);border:2px solid transparent;font-size:19px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:.11s}
+.ep.sel{border-color:var(--text)}
+.ep:active{transform:scale(.88)}
+
+/* ── SCHEDULE PICKER ── */
+.sched-wrap{margin-bottom:13px}
+/* Row 1: unit selector tabs */
+.sunit-row{display:flex;gap:5px;margin-bottom:10px}
+.sunit{flex:1;padding:10px 0;border-radius:11px;background:var(--bg3);border:2px solid transparent;font-size:12px;font-weight:800;color:var(--text2);cursor:pointer;text-align:center;transition:.13s;letter-spacing:-.1px}
+.sunit.sel{background:var(--text);color:var(--bg);border-color:var(--text)}
+/* Day-of-week picker */
+.dow-row{display:flex;gap:5px}
+.dow{flex:1;padding:9px 0;border-radius:10px;background:var(--bg3);border:2px solid transparent;font-size:11px;font-weight:800;color:var(--text2);cursor:pointer;text-align:center;transition:.12s}
+.dow.sel{background:var(--green);color:#fff;border-color:var(--green)}
+/* Day-of-month: number grid */
+.dom-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}
+.domn{height:36px;border-radius:9px;background:var(--bg3);border:2px solid transparent;font-size:12px;font-weight:800;color:var(--text2);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.11s}
+.domn.sel{background:var(--green);color:#fff;border-color:var(--green)}
+/* Monthly: month grid */
+.mth-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:5px}
+.mthn{padding:9px 0;border-radius:10px;background:var(--bg3);border:2px solid transparent;font-size:11px;font-weight:800;color:var(--text2);cursor:pointer;text-align:center;transition:.11s}
+.mthn.sel{background:var(--green);color:#fff;border-color:var(--green)}
+/* interval every-N for custom */
+.every-row{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.every-row .fi{flex:1;margin-bottom:0;width:auto}
+.every-label{font-size:13px;font-weight:800;color:var(--text2);white-space:nowrap}
+
+/* AI BOX */
+.aibox{background:var(--bg3);border-radius:14px;padding:11px 13px;margin-bottom:13px;border:1.5px solid transparent;transition:.25s}
+.aibox.loading{border-color:var(--green)}
+.aihead{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:800;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
+.aidot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 1.4s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.3;transform:scale(.65)}}
+.aitip{font-size:13px;color:var(--text);line-height:1.55;font-weight:600}
+.aichips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.achip{padding:5px 11px;border-radius:20px;background:var(--bg2);border:1.5px solid var(--border2);font-size:12px;font-weight:800;color:var(--text2);cursor:pointer;transition:.11s}
+.achip:active{background:var(--text);color:var(--bg)}
+
+.savebtn{width:100%;padding:15px;background:var(--text);border:none;border-radius:14px;color:var(--bg);font-size:16px;font-weight:900;cursor:pointer;transition:.14s;margin-top:4px;letter-spacing:-.3px}
+.savebtn:active{transform:scale(.98);opacity:.82}
+.cancelbtn{width:100%;padding:11px;background:transparent;border:none;color:var(--text2);font-size:14px;font-weight:700;cursor:pointer;margin-top:4px}
+
+/* ── AI CHAT SECTION ── */
+.chat-wrap{padding:0 16px 14px}
+.chat-top{display:flex;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid var(--border);margin-bottom:12px}
+.chat-av{width:40px;height:40px;border-radius:13px;background:var(--text);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.chat-av-inner{filter:invert(1)}
+.msgs{display:flex;flex-direction:column;gap:8px;min-height:80px}
+.msg{padding:11px 14px;border-radius:14px;font-size:14px;font-weight:600;line-height:1.55;animation:fup .2s ease;max-width:94%}
+@keyframes fup{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+.msg.bot{background:var(--bg3);color:var(--text);align-self:flex-start}
+.msg.usr{background:var(--text);color:var(--bg);align-self:flex-end}
+.typing{display:flex;gap:4px;align-items:center;padding:13px;background:var(--bg3);border-radius:14px;align-self:flex-start}
+.td{width:7px;height:7px;border-radius:50%;background:var(--text2)}
+.td:nth-child(1){animation:b 1s .0s infinite}
+.td:nth-child(2){animation:b 1s .15s infinite}
+.td:nth-child(3){animation:b 1s .3s infinite}
+@keyframes b{0%,80%,100%{transform:translateY(0);opacity:.4}40%{transform:translateY(-6px);opacity:1}}
+.qchips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:11px}
+.qchip{padding:7px 12px;border-radius:11px;background:var(--bg2);border:1.5px solid var(--border2);font-size:12px;font-weight:800;color:var(--text2);cursor:pointer;transition:.11s;letter-spacing:-.1px}
+.qchip:active{background:var(--text);color:var(--bg)}
+.chat-input-row{display:flex;gap:8px;margin-top:12px}
+.cinput{flex:1;background:var(--bg3);border:1.5px solid transparent;border-radius:13px;padding:12px 14px;font-size:14px;font-weight:600;color:var(--text);outline:none;transition:.13s}
+.cinput:focus{border-color:var(--text);background:var(--bg2)}
+.cinput::placeholder{color:var(--text3)}
+.csend{width:46px;height:46px;background:var(--text);border:none;border-radius:13px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:.14s}
+.csend:active{transform:scale(.91)}
+.csend svg{color:var(--bg)}
+
+/* AI CREATE REMINDER CARD */
+.ai-create-preview{background:var(--bg2);border:2px solid var(--green);border-radius:14px;padding:13px 14px;margin-top:10px;display:none}
+.ai-create-preview.show{display:block;animation:fup .2s ease}
+.ai-create-title{font-size:13px;font-weight:800;color:var(--text);margin-bottom:8px}
+.ai-create-row{display:flex;align-items:center;justify-content:space-between;font-size:13px;color:var(--text2);margin-bottom:4px;font-weight:600}
+.ai-create-val{font-weight:800;color:var(--text)}
+.ai-create-btns{display:flex;gap:8px;margin-top:11px}
+.ai-create-btn{flex:1;padding:10px;border-radius:11px;border:none;font-size:13px;font-weight:800;cursor:pointer;transition:.12s}
+.ai-create-btn.confirm{background:var(--green);color:#fff}
+.ai-create-btn.edit{background:var(--bg3);color:var(--text2)}
+.ai-create-btn:active{transform:scale(.95)}
+
+/* SETTINGS */
+.scard{background:var(--bg2);border:1px solid var(--border);border-radius:16px;overflow:hidden;margin-bottom:13px}
+.srow{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid var(--border)}
+.srow:last-child{border-bottom:none}
+.srow-main{font-size:14px;font-weight:800;color:var(--text)}
+.srow-sub{font-size:12px;color:var(--text2);margin-top:1px;font-weight:600}
+.tgl{width:46px;height:27px;border-radius:14px;background:var(--bg3);position:relative;cursor:pointer;transition:.18s;flex-shrink:0}
+.tgl.on{background:var(--green)}
+.tgl::after{content:'';position:absolute;width:21px;height:21px;border-radius:50%;background:#fff;top:3px;left:3px;transition:.18s;box-shadow:0 1px 4px rgba(0,0,0,.18)}
+.tgl.on::after{transform:translateX(19px)}
+
+.hidden{display:none!important}
+section{display:none}
+section.on{display:block}
+</style>
+</head>
+<body>
+
+<header class="hdr">
+  <div class="logo">HOME<em>REM</em></div>
+  <div style="display:flex;gap:7px">
+    <div class="hbtn" onclick="showSection('ai')">✨</div>
+    <div class="hbtn" onclick="showSection('settings')">⚙️</div>
+  </div>
+</header>
+
+<!-- ── HOME ── -->
+<section id="sec-home" class="on">
+  <div class="tabs">
+    <div class="tab on" id="tab-rings" onclick="switchTab('rings')">Rings</div>
+    <div class="tab" id="tab-list" onclick="switchTab('list')">List</div>
+    <div class="tab" id="tab-done" onclick="switchTab('done')">Done</div>
+  </div>
+
+  <div id="view-rings">
+    <div id="ring-grid" class="rgrid"></div>
+    <div id="empty-rings" class="empty hidden">
+      <div class="empty-ico">🏠</div>
+      <div style="font-size:17px;font-weight:900">No reminders yet</div>
+      <div style="font-size:13px;color:var(--text2);font-weight:600;line-height:1.6">Tap + or ask AI to create<br>your first home reminder</div>
+    </div>
+  </div>
+
+  <div id="view-list" class="hidden" style="padding:8px 16px 0">
+    <div id="list-body"></div>
+    <div id="empty-list" class="empty hidden"><div class="empty-ico">📋</div><div style="font-size:14px;color:var(--text2);font-weight:700">No active reminders</div></div>
+  </div>
+
+  <div id="view-done" class="hidden" style="padding:8px 16px 0">
+    <div id="done-body"></div>
+    <div id="empty-done" class="empty hidden"><div class="empty-ico">✓</div><div style="font-size:14px;color:var(--text2);font-weight:700">Nothing completed yet</div></div>
+  </div>
+</section>
+
+<!-- ── AI CHAT ── -->
+<section id="sec-ai">
+  <div class="chat-wrap">
+    <div class="chat-top">
+      <div class="chat-av">✨</div>
+      <div>
+        <div style="font-size:15px;font-weight:900">AI Assistant</div>
+        <div style="font-size:12px;color:var(--text2);font-weight:600">Type a reminder to create it, or just ask anything</div>
+      </div>
+    </div>
+
+    <div id="qchips" class="qchips">
+      <div class="qchip" onclick="qp('Remind me to change the AC filter every 90 days')">Change AC filter</div>
+      <div class="qchip" onclick="qp('Clean the coffee machine every 2 weeks')">Clean coffee machine</div>
+      <div class="qchip" onclick="qp('Water the plants every Monday and Thursday')">Water plants</div>
+      <div class="qchip" onclick="qp('Take vitamins every day at morning')">Daily vitamins</div>
+      <div class="qchip" onclick="qp('What home tasks should I be tracking?')">Suggest tasks</div>
+      <div class="qchip" onclick="qp('Which of my tasks are overdue?')">Check overdue</div>
+    </div>
+
+    <div id="msgs" class="msgs"></div>
+
+    <!-- AI REMINDER PREVIEW CARD -->
+    <div class="ai-create-preview" id="ai-preview">
+      <div class="ai-create-title">✅ Create this reminder?</div>
+      <div class="ai-create-row"><span>Task</span><span class="ai-create-val" id="prev-name">—</span></div>
+      <div class="ai-create-row"><span>Icon</span><span class="ai-create-val" id="prev-emoji">—</span></div>
+      <div class="ai-create-row"><span>Schedule</span><span class="ai-create-val" id="prev-sched">—</span></div>
+      <div class="ai-create-btns">
+        <button class="ai-create-btn edit" onclick="openEditFromPreview()">Customize</button>
+        <button class="ai-create-btn confirm" onclick="confirmAICreate()">Add ✓</button>
+      </div>
+    </div>
+
+    <div class="chat-input-row">
+      <input class="cinput" id="cinput" placeholder="e.g. Clean coffee filter every 20 days…" onkeydown="if(event.key==='Enter')doChat()">
+      <button class="csend" onclick="doChat()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- ── SETTINGS ── -->
+<section id="sec-settings" style="padding:16px">
+  <div style="font-size:20px;font-weight:900;margin-bottom:15px;letter-spacing:-.5px">Settings</div>
+  <div class="scard">
+    <div class="srow">
+      <div><div class="srow-main">AI Tips on Create</div><div class="srow-sub">Smart suggestions when adding reminders</div></div>
+      <div class="tgl on" onclick="this.classList.toggle('on')"></div>
+    </div>
+    <div class="srow">
+      <div><div class="srow-main">Overdue Alert Banner</div><div class="srow-sub">Show banner for late reminders</div></div>
+      <div class="tgl on" onclick="this.classList.toggle('on')"></div>
+    </div>
+    <div class="srow">
+      <div><div class="srow-main">Dark Mode</div><div class="srow-sub">Follows system appearance</div></div>
+      <div class="tgl on"></div>
+    </div>
+  </div>
+  <div class="scard">
+    <div class="srow" style="cursor:pointer" onclick="if(confirm('Reset all completed tasks?')){tasks.forEach(t=>t.lastDone=null);save();render()}">
+      <div style="color:var(--orange);font-size:14px;font-weight:800">Reset All Completed</div>
+    </div>
+    <div class="srow" style="cursor:pointer" onclick="if(confirm('Delete ALL reminders? This cannot be undone.')){tasks=[];save();render()}">
+      <div style="color:var(--red);font-size:14px;font-weight:800">Delete All Reminders</div>
+    </div>
+  </div>
+  <div style="text-align:center;font-size:12px;color:var(--text3);padding:18px 0;font-weight:700;letter-spacing:-.1px">
+    HOMEREM v1.0 · AI by Claude<br>All data stored on your device
+  </div>
+</section>
+
+<!-- FAB -->
+<button class="fab" onclick="openAdd()">
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+</button>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="ni on" id="ni-home" onclick="showSection('home')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+    Home
+  </div>
+  <div class="ni" id="ni-ai" onclick="showSection('ai')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>
+    AI
+  </div>
+  <div class="ni" id="ni-settings" onclick="showSection('settings')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+    Settings
+  </div>
+</nav>
+
+<!-- ── ADD / EDIT MODAL ── -->
+<div class="overlay" id="modal" onclick="closeIfBg(event)">
+  <div class="sheet">
+    <div class="handle"></div>
+    <div class="sheet-title" id="modal-title">New Reminder</div>
+
+    <div class="aibox hidden" id="ai-tip-box">
+      <div class="aihead"><div class="aidot"></div> AI Suggestion</div>
+      <div class="aitip" id="ai-tip-text"></div>
+      <div class="aichips" id="ai-tip-chips"></div>
+    </div>
+
+    <label class="flabel">Pick an icon</label>
+    <div class="egrid" id="egrid"></div>
+    <input class="fi" id="custom-emoji" placeholder="Or paste any emoji…" maxlength="4">
+
+    <label class="flabel">Reminder name</label>
+    <input class="fi" id="tname" placeholder="e.g. Clean coffee filter" oninput="onNameInput()">
+
+    <!-- ── SCHEDULE ── -->
+    <label class="flabel">Repeat schedule</label>
+    <div class="sched-wrap">
+
+      <!-- Unit tabs: Every N Days / Weekly / Monthly / Yearly -->
+      <div class="sunit-row">
+        <div class="sunit sel" id="su-days"    onclick="setSchedUnit('days')">Days</div>
+        <div class="sunit"     id="su-weeks"   onclick="setSchedUnit('weeks')">Weekly</div>
+        <div class="sunit"     id="su-months"  onclick="setSchedUnit('months')">Monthly</div>
+        <div class="sunit"     id="su-years"   onclick="setSchedUnit('years')">Yearly</div>
+      </div>
+
+      <!-- DAYS: every N days -->
+      <div id="sp-days">
+        <div class="every-row">
+          <span class="every-label">Every</span>
+          <input class="fi" id="every-n" type="number" min="1" max="365" value="7" style="width:80px;text-align:center;margin-bottom:0">
+          <span class="every-label">days</span>
+        </div>
+        <div style="font-size:12px;color:var(--text3);font-weight:600;margin-top:-6px">Ring resets each time you mark it done. Runs forever until you delete it.</div>
+      </div>
+
+      <!-- WEEKS: pick days of week -->
+      <div id="sp-weeks" class="hidden">
+        <div style="font-size:12px;color:var(--text2);font-weight:700;margin-bottom:8px">Choose which days of the week:</div>
+        <div class="dow-row">
+          <div class="dow" id="dow-0" onclick="toggleDow(0)">Su</div>
+          <div class="dow" id="dow-1" onclick="toggleDow(1)">Mo</div>
+          <div class="dow" id="dow-2" onclick="toggleDow(2)">Tu</div>
+          <div class="dow" id="dow-3" onclick="toggleDow(3)">We</div>
+          <div class="dow" id="dow-4" onclick="toggleDow(4)">Th</div>
+          <div class="dow" id="dow-5" onclick="toggleDow(5)">Fr</div>
+          <div class="dow" id="dow-6" onclick="toggleDow(6)">Sa</div>
+        </div>
+        <div style="font-size:12px;color:var(--text3);font-weight:600;margin-top:8px">Ring shows days until next selected day. Repeats every week.</div>
+      </div>
+
+      <!-- MONTHS: pick day(s) of month -->
+      <div id="sp-months" class="hidden">
+        <div style="font-size:12px;color:var(--text2);font-weight:700;margin-bottom:8px">Choose day(s) of the month:</div>
+        <div class="dom-grid" id="dom-grid"></div>
+        <div style="font-size:12px;color:var(--text3);font-weight:600;margin-top:8px">Ring resets each month on your chosen day(s). Repeats every month.</div>
+      </div>
+
+      <!-- YEARS: pick month + day -->
+      <div id="sp-years" class="hidden">
+        <div style="font-size:12px;color:var(--text2);font-weight:700;margin-bottom:8px">Choose month:</div>
+        <div class="mth-grid" id="mth-grid"></div>
+        <div style="font-size:12px;color:var(--text2);font-weight:700;margin:10px 0 6px">Day of month:</div>
+        <input class="fi" id="year-day" type="number" min="1" max="31" value="1" placeholder="Day (1–31)" style="margin-bottom:0">
+        <div style="font-size:12px;color:var(--text3);font-weight:600;margin-top:6px">Ring resets each year on this date. Repeats every year.</div>
+      </div>
+
+    </div><!-- /sched-wrap -->
+
+    <button class="savebtn" onclick="saveTask()">Save Reminder</button>
+    <button class="cancelbtn" onclick="closeModal()">Cancel</button>
+  </div>
+</div>
+
+<script>
+const API = 'https://api.anthropic.com/v1/messages';
+
+const EMOJIS = ['🏠','☕','🌱','💊','🐱','🐶','🚗','🛒','💧','🔧','🧹','🧴','🍽️','📦','🪴','🏋️','📚','🪥','🛏️','💡','🔑','🧺','🪟','🌊','🍀','🔋','🪣','🌡️','🧽','❄️'];
+const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const API_URL = API;
+
+let tasks = JSON.parse(localStorage.getItem('homerem_tasks') || '[]');
+function save() { localStorage.setItem('homerem_tasks', JSON.stringify(tasks)); }
+
+// ── state ──
+let selEmoji = EMOJIS[0];
+let schedUnit = 'days'; // 'days' | 'weeks' | 'months' | 'years'
+let selDows = []; // weekly: [0..6]
+let selDoms = []; // monthly: [1..31]
+let selMonth = 0; // yearly
+let editId = null;
+let chatHist = [];
+let pendingAITask = null; // task object waiting for confirmation
+
+// ── CORE LOGIC ──
+function intervalDays(task) {
+  if (task.schedUnit === 'days') return task.everyN || 7;
+  if (task.schedUnit === 'weeks') return 7;
+  if (task.schedUnit === 'months') return 30.44;
+  if (task.schedUnit === 'years') return 365.25;
+  return 7;
+}
+
+function getDaysLeft(task) {
+  if (!task.lastDone) return 0;
+  const elapsed = (Date.now() - new Date(task.lastDone)) / 86400000;
+  return intervalDays(task) - elapsed;
+}
+
+function getRingFill(task) {
+  const dl = getDaysLeft(task);
+  const id = intervalDays(task);
+  if (dl >= id) return 1;
+  if (dl <= 0) return 0;
+  return dl / id;
+}
+
+function getRingColor(fill, dl) {
+  if (dl < 0) return '#e83838';
+  if (fill > 0.5) return '#2dbe6c';
+  if (fill > 0.25) return '#e8b800';
+  if (fill > 0) return '#f07d32';
+  return '#e83838';
+}
+
+function fmtLeft(dl) {
+  const abs = Math.abs(dl);
+  if (abs < 1) {
+    const hrs = Math.round(abs * 24);
+    return { num: hrs < 1 ? '<1' : hrs, unit: 'hrs', over: dl < 0 };
+  }
+  const d = Math.round(abs);
+  return { num: d, unit: d === 1 ? 'day' : 'days', over: dl < 0 };
+}
+
+function schedLabel(task) {
+  if (task.schedUnit === 'days') return `Every ${task.everyN || 7} days`;
+  if (task.schedUnit === 'weeks') {
+    const names = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+    const days = (task.dows || []).map(d => names[d]).join(', ');
+    return days ? `Weekly · ${days}` : 'Weekly';
+  }
+  if (task.schedUnit === 'months') {
+    const doms = (task.doms || []).join(', ');
+    return doms ? `Monthly · ${doms}` : 'Monthly';
+  }
+  if (task.schedUnit === 'years') return `Yearly · ${MONTHS[task.yearMonth || 0]} ${task.yearDay || 1}`;
+  return '';
+}
+
+function buildRingSVG(fill, color, size) {
+  const r = size / 2 - 5;
+  const c = 2 * Math.PI * r;
+  const dash = c * Math.max(0, fill);
+  return `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">
+    <circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="rgba(128,128,128,0.1)" stroke-width="5.5"/>
+    <circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="${color}" stroke-width="5.5"
+      stroke-dasharray="${dash.toFixed(1)} ${c.toFixed(1)}" stroke-linecap="round"
+      transform="rotate(-90 ${size/2} ${size/2})"/>
+  </svg>`;
+}
+
+// ── RENDER ──
+let curTab = 'rings';
+function render() {
+  const active = tasks.filter(t => !t.archived);
+  const done = tasks.filter(t => t.archived);
+
+  // rings
+  const rg = document.getElementById('ring-grid');
+  const er = document.getElementById('empty-rings');
+  if (!active.length) { rg.innerHTML = ''; er.classList.remove('hidden'); }
+  else { er.classList.add('hidden'); rg.innerHTML = active.map(ringCard).join(''); }
+
+  // list
+  const lb = document.getElementById('list-body');
+  const el = document.getElementById('empty-list');
+  if (!active.length) { lb.innerHTML = ''; el.classList.remove('hidden'); }
+  else { el.classList.add('hidden'); lb.innerHTML = active.map(listCard).join(''); }
+
+  // done
+  const db = document.getElementById('done-body');
+  const ed = document.getElementById('empty-done');
+  if (!done.length) { db.innerHTML = ''; ed.classList.remove('hidden'); }
+  else { ed.classList.add('hidden'); db.innerHTML = done.map(doneCard).join(''); }
+}
+
+function ringCard(t) {
+  const dl = getDaysLeft(t); const fill = getRingFill(t); const color = getRingColor(fill, dl);
+  const { num, unit, over } = fmtLeft(dl);
+  const svg = buildRingSVG(fill, color, 76);
+  return `<div class="rc">
+    <div class="rc-bar" style="background:${color}"></div>
+    <span class="rc-emoji">${t.emoji || '⏰'}</span>
+    <div class="rc-ring">${svg}
+      <div class="rc-center">
+        <div class="rc-num" style="color:${color}">${over?'+':''}${num}</div>
+        <div class="rc-unit">${over?'late':unit}</div>
+      </div>
+    </div>
+    <div class="rc-name">${t.name}</div>
+    <div class="rc-sched">${schedLabel(t)}</div>
+    <div class="rc-btns">
+      <button class="rcbtn edit" onclick="event.stopPropagation();openEdit('${t.id}')">Edit</button>
+      <button class="rcbtn done" onclick="event.stopPropagation();markDone('${t.id}')">Done ✓</button>
+    </div>
+  </div>`;
+}
+
+function listCard(t) {
+  const dl = getDaysLeft(t); const fill = getRingFill(t); const color = getRingColor(fill, dl);
+  const { num, unit, over } = fmtLeft(dl);
+  const svg = buildRingSVG(fill, color, 52);
+  const bc = dl < 0 ? 'br' : fill > 0.5 ? 'bg' : fill > 0.25 ? 'by' : 'bo';
+  const bt = over ? `+${num} ${unit} late` : `${num} ${unit} left`;
+  return `<div class="lc" onclick="markDone('${t.id}')">
+    <div class="lc-ring">${svg}
+      <div class="lc-rc">
+        <div class="lc-num" style="color:${color}">${over?'+':''}${num}</div>
+        <div class="lc-u">${over?'late':unit}</div>
+      </div>
+    </div>
+    <div class="lc-body">
+      <div class="lc-name">${t.name}</div>
+      <div class="lc-meta"><span class="badge ${bc}">${bt}</span> · ${schedLabel(t)}</div>
+    </div>
+    <div class="lc-em">${t.emoji || '⏰'}</div>
+  </div>`;
+}
+
+function doneCard(t) {
+  const when = t.lastDone ? new Date(t.lastDone).toLocaleDateString('en-US',{month:'short',day:'numeric'}) : '—';
+  return `<div class="lc" style="opacity:.55">
+    <div style="width:52px;height:52px;border-radius:50%;background:var(--bg3);display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0">${t.emoji||'⏰'}</div>
+    <div class="lc-body">
+      <div class="lc-name">${t.name}</div>
+      <div class="lc-meta">Completed ${when} · <span style="color:var(--green);font-weight:800">✓ Done</span></div>
+    </div>
+    <button onclick="event.stopPropagation();unarchive('${t.id}')" style="padding:6px 10px;border-radius:10px;background:var(--bg3);border:none;font-size:11px;font-weight:800;color:var(--text2);cursor:pointer;flex-shrink:0">Restore</button>
+  </div>`;
+}
+
+function markDone(id) {
+  const t = tasks.find(t => t.id === id);
+  if (t) { t.lastDone = new Date().toISOString(); save(); render(); }
+}
+function unarchive(id) {
+  const t = tasks.find(t => t.id === id);
+  if (t) { t.archived = false; save(); render(); }
+}
+
+// ── TABS / SECTIONS ──
+function switchTab(tab) {
+  curTab = tab;
+  ['rings','list','done'].forEach(n => {
+    document.getElementById('view-' + n).classList.toggle('hidden', n !== tab);
+    document.getElementById('tab-' + n).classList.toggle('on', n === tab);
+  });
+}
+function showSection(name) {
+  ['home','ai','settings'].forEach(s => {
+    document.getElementById('sec-' + s).classList.toggle('on', s === name);
+    const ni = document.getElementById('ni-' + s);
+    if (ni) ni.classList.toggle('on', s === name);
+  });
+  document.querySelector('.fab').style.display = name === 'home' ? 'flex' : 'none';
+}
+
+// ── MODAL ──
+function buildEmojiGrid() {
+  document.getElementById('egrid').innerHTML = EMOJIS.map(e =>
+    `<div class="ep${e === selEmoji ? ' sel' : ''}" onclick="pickEmoji('${e}')">${e}</div>`
+  ).join('');
+}
+function pickEmoji(e) { selEmoji = e; document.getElementById('custom-emoji').value = ''; buildEmojiGrid(); }
+
+function buildDomGrid() {
+  let html = '';
+  for (let d = 1; d <= 31; d++) {
+    html += `<div class="domn${selDoms.includes(d)?' sel':''}" onclick="toggleDom(${d})">${d}</div>`;
+  }
+  document.getElementById('dom-grid').innerHTML = html;
+}
+function buildMthGrid() {
+  document.getElementById('mth-grid').innerHTML = MONTHS.map((m,i) =>
+    `<div class="mthn${selMonth===i?' sel':''}" onclick="pickMonth(${i})">${m}</div>`
+  ).join('');
+}
+
+function setSchedUnit(u) {
+  schedUnit = u;
+  ['days','weeks','months','years'].forEach(x => {
+    document.getElementById('su-' + x).classList.toggle('sel', x === u);
+    document.getElementById('sp-' + x).classList.toggle('hidden', x !== u);
+  });
+}
+
+function toggleDow(d) {
+  const i = selDows.indexOf(d);
+  if (i > -1) selDows.splice(i, 1); else selDows.push(d);
+  selDows.sort((a,b)=>a-b);
+  ['0','1','2','3','4','5','6'].forEach(x => document.getElementById('dow-' + x).classList.toggle('sel', selDows.includes(parseInt(x))));
+}
+
+function toggleDom(d) {
+  const i = selDoms.indexOf(d);
+  if (i > -1) selDoms.splice(i, 1); else selDoms.push(d);
+  selDoms.sort((a,b)=>a-b);
+  buildDomGrid();
+}
+
+function pickMonth(m) {
+  selMonth = m;
+  buildMthGrid();
+}
+
+function openAdd() {
+  editId = null; selEmoji = EMOJIS[0]; schedUnit = 'days';
+  selDows = []; selDoms = []; selMonth = 0;
+  document.getElementById('tname').value = '';
+  document.getElementById('custom-emoji').value = '';
+  document.getElementById('every-n').value = '7';
+  document.getElementById('year-day').value = '1';
+  document.getElementById('modal-title').textContent = 'New Reminder';
+  document.getElementById('ai-tip-box').classList.add('hidden');
+  buildEmojiGrid(); buildDomGrid(); buildMthGrid();
+  setSchedUnit('days');
+  document.getElementById('modal').classList.add('open');
+  setTimeout(() => document.getElementById('tname').focus(), 340);
+}
+
+function openEdit(id) {
+  const t = tasks.find(t => t.id === id);
+  if (!t) return;
+  editId = id; selEmoji = t.emoji || EMOJIS[0];
+  schedUnit = t.schedUnit || 'days';
+  selDows = [...(t.dows || [])];
+  selDoms = [...(t.doms || [])];
+  selMonth = t.yearMonth || 0;
+  document.getElementById('tname').value = t.name;
+  document.getElementById('every-n').value = t.everyN || 7;
+  document.getElementById('year-day').value = t.yearDay || 1;
+  document.getElementById('modal-title').textContent = 'Edit Reminder';
+  document.getElementById('ai-tip-box').classList.add('hidden');
+  buildEmojiGrid(); buildDomGrid(); buildMthGrid();
+  setSchedUnit(schedUnit);
+  document.getElementById('modal').classList.add('open');
+}
+
+function closeModal() { document.getElementById('modal').classList.remove('open'); }
+function closeIfBg(e) { if (e.target.classList.contains('overlay')) closeModal(); }
+
+function saveTask() {
+  const name = document.getElementById('tname').value.trim();
+  if (!name) { document.getElementById('tname').focus(); return; }
+  const ce = document.getElementById('custom-emoji').value.trim();
+  const emoji = ce || selEmoji;
+  const everyN = parseInt(document.getElementById('every-n').value) || 7;
+  const yearDay = parseInt(document.getElementById('year-day').value) || 1;
+
+  const obj = { name, emoji, schedUnit, everyN, dows: [...selDows], doms: [...selDoms], yearMonth: selMonth, yearDay, archived: false };
+  if (editId) {
+    const t = tasks.find(t => t.id === editId);
+    if (t) Object.assign(t, obj);
+  } else {
+    tasks.push({ id: Date.now().toString(), lastDone: new Date().toISOString(), createdAt: new Date().toISOString(), ...obj });
+  }
+  save(); render(); closeModal();
+}
+
+// ── AI TIP ON NAME INPUT ──
+let aiDeb = null;
+function onNameInput() {
+  const val = document.getElementById('tname').value.trim();
+  clearTimeout(aiDeb);
+  if (val.length < 4) return;
+  aiDeb = setTimeout(() => getAITip(val), 850);
+}
+
+async function getAITip(name) {
+  const box = document.getElementById('ai-tip-box');
+  const tip = document.getElementById('ai-tip-text');
+  const chips = document.getElementById('ai-tip-chips');
+  box.classList.remove('hidden'); box.classList.add('loading');
+  tip.textContent = 'Thinking…'; chips.innerHTML = '';
+  try {
+    const r = await fetch(API, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({
+      model:'claude-sonnet-4-20250514', max_tokens:1000,
+      messages:[{ role:'user', content:`User creating a recurring reminder: "${name}".
+Give a 1-sentence tip. Suggest 3 schedule chips: realistic intervals for this type of task.
+JSON only, no markdown: {"tip":"...","chips":[{"label":"Every 7 days","n":7,"unit":"days"},{"label":"Every 2 weeks","n":14,"unit":"days"},{"label":"Monthly","n":30,"unit":"days"}]}`}]})
+    });
+    const d = await r.json();
+    const p = JSON.parse(d.content[0].text.replace(/```json|```/g,'').trim());
+    tip.textContent = p.tip;
+    chips.innerHTML = p.chips.map(c => `<div class="achip" onclick="applyTipChip(${c.n},'days')">${c.label}</div>`).join('');
+    box.classList.remove('loading');
+    suggestEmojiForName(name);
+  } catch(e) { tip.textContent = 'AI unavailable.'; box.classList.remove('loading'); }
+}
+
+async function suggestEmojiForName(name) {
+  try {
+    const r = await fetch(API, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({
+      model:'claude-sonnet-4-20250514', max_tokens:50,
+      messages:[{ role:'user', content:`Best single emoji for a home reminder called "${name}". Reply with ONLY the emoji.`}]})
+    });
+    const d = await r.json();
+    const e = d.content[0].text.trim().slice(0,2);
+    if (e) { selEmoji = e; buildEmojiGrid(); }
+  } catch(err) {}
+}
+
+function applyTipChip(n, unit) {
+  setSchedUnit('days');
+  document.getElementById('every-n').value = n;
+}
+
+// ── AI CHAT ──
+async function doChat() {
+  const inp = document.getElementById('cinput');
+  const msg = inp.value.trim();
+  if (!msg) return;
+  inp.value = '';
+  document.getElementById('qchips').style.display = 'none';
+  document.getElementById('ai-preview').classList.remove('show');
+  pendingAITask = null;
+  addMsg(msg, 'usr');
+  chatHist.push({ role:'user', content: msg });
+  showTyping();
+
+  const ctx = tasks.length
+    ? tasks.map(t => `"${t.name}" (${schedLabel(t)}, ${getDaysLeft(t).toFixed(1)}d left)`).join('; ')
+    : 'No tasks yet.';
+
+  // Tell Claude to detect if user wants to CREATE a reminder
+  const sysPrompt = `You are an AI assistant inside HOMEREM, a home reminder app. Current reminders: ${ctx}.
+
+IMPORTANT: If the user's message describes a task they want to be reminded about (even casually), you MUST extract a reminder and return JSON. Otherwise return a normal text reply.
+
+If creating a reminder, respond ONLY with this JSON (no markdown, no extra text):
+{"action":"create","name":"...","emoji":"...","schedUnit":"days","everyN":7,"schedLabel":"Every 7 days","tip":"one sentence why this interval is good"}
+
+schedUnit options: "days","weeks","months","years"
+everyN: number of days between occurrences (use 7 for weekly, 30 for monthly, 365 for yearly, etc.)
+
+If NOT creating (just answering a question), respond with plain text.`;
+
+  try {
+    const r = await fetch(API, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({
+      model:'claude-sonnet-4-20250514', max_tokens:1000,
+      system: sysPrompt,
+      messages: chatHist
+    })});
+    const d = await r.json();
+    removeTyping();
+    const reply = d.content[0].text.trim();
+
+    // Try to parse as create action
+    let parsed = null;
+    try { parsed = JSON.parse(reply.replace(/```json|```/g,'').trim()); } catch(e) {}
+
+    if (parsed && parsed.action === 'create') {
+      pendingAITask = parsed;
+      addMsg(`Got it! Here's the reminder I'll create for you:`, 'bot');
+      chatHist.push({ role:'assistant', content: `I'll create a reminder for "${parsed.name}".` });
+      showAIPreview(parsed);
+    } else {
+      addMsg(reply, 'bot');
+      chatHist.push({ role:'assistant', content: reply });
+    }
+  } catch(e) { removeTyping(); addMsg('Connection error — please try again.', 'bot'); }
+}
+
+function qp(t) { document.getElementById('cinput').value = t; doChat(); }
+
+function addMsg(text, role) {
+  const el = document.createElement('div');
+  el.className = 'msg ' + role; el.textContent = text;
+  document.getElementById('msgs').appendChild(el);
+  el.scrollIntoView({ behavior:'smooth' });
+}
+function showTyping() {
+  const el = document.createElement('div');
+  el.id = 'typing'; el.className = 'typing';
+  el.innerHTML = '<div class="td"></div><div class="td"></div><div class="td"></div>';
+  document.getElementById('msgs').appendChild(el);
+  el.scrollIntoView({ behavior:'smooth' });
+}
+function removeTyping() { document.getElementById('typing')?.remove(); }
+
+function showAIPreview(p) {
+  document.getElementById('prev-name').textContent = `${p.emoji || '⏰'} ${p.name}`;
+  document.getElementById('prev-emoji').textContent = p.emoji || '⏰';
+  document.getElementById('prev-sched').textContent = p.schedLabel || `Every ${p.everyN} days`;
+  const pv = document.getElementById('ai-preview');
+  pv.classList.add('show');
+  pv.scrollIntoView({ behavior:'smooth' });
+}
+
+function confirmAICreate() {
+  if (!pendingAITask) return;
+  const p = pendingAITask;
+  tasks.push({
+    id: Date.now().toString(),
+    name: p.name, emoji: p.emoji || '⏰',
+    schedUnit: p.schedUnit || 'days',
+    everyN: p.everyN || 7,
+    dows: [], doms: [], yearMonth: 0, yearDay: 1,
+    lastDone: new Date().toISOString(),
+    archived: false, createdAt: new Date().toISOString()
+  });
+  save(); render();
+  pendingAITask = null;
+  document.getElementById('ai-preview').classList.remove('show');
+  addMsg(`✅ "${p.name}" added to your reminders!`, 'bot');
+}
+
+function openEditFromPreview() {
+  if (!pendingAITask) return;
+  const p = pendingAITask;
+  selEmoji = p.emoji || EMOJIS[0];
+  schedUnit = p.schedUnit || 'days';
+  selDows = []; selDoms = []; selMonth = 0;
+  document.getElementById('tname').value = p.name;
+  document.getElementById('every-n').value = p.everyN || 7;
+  document.getElementById('year-day').value = 1;
+  document.getElementById('modal-title').textContent = 'New Reminder';
+  document.getElementById('ai-tip-box').classList.add('hidden');
+  editId = null;
+  buildEmojiGrid(); buildDomGrid(); buildMthGrid();
+  setSchedUnit(schedUnit);
+  document.getElementById('modal').classList.add('open');
+  document.getElementById('ai-preview').classList.remove('show');
+  pendingAITask = null;
+}
+
+// ── INIT ──
+setInterval(render, 60000);
+if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(()=>{});
+buildDomGrid(); buildMthGrid(); buildEmojiGrid();
+render(); showSection('home'); switchTab('rings');
+</script>
+</body>
+</html>
