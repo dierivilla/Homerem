@@ -1,8 +1,9 @@
-{
+ {
   "name": "HOMEREM – Home Reminders",
   "short_name": "HOMEREM",
-  "description": "Visual recurring home reminders with AI. Rings drain as days pass.",
-  "start_url": "/",
+  "description": "Visual recurring home reminders with AI.",
+  "start_url": "/Homerem/index.html",
+  "scope": "/Homerem/",
   "display": "standalone",
   "background_color": "#f8f7f3",
   "theme_color": "#f8f7f3",
